@@ -1,19 +1,22 @@
 sudo: required
 serviecs:
-    - docker
+  - docker
 
 before_install:
-    - docker build -t fil1994/react-test -f ./client/Dockerfile.dev ./client
+  - docker build -t fil1994/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-    - docker run -e CI=true fil1994/react-test npm test -- --coverage
+  - docker run -e CI=true fil1994/react-test npm test -- --coverage
 
 after_sucess:
-    - docker build -t fil1994/multi-client ./client
-    - docker build -t fil1994/multi-nginx ./nginx
-    - docker build -t fil1994/multi-server ./server
-    - docker build -t fil1994/multi-worker ./worker
-    # Log in to the docker CLI
-
-    # Take those images and push them to docker hub
-    
+  - docker build -t fil1994/multi-client ./client
+  - docker build -t fil1994/multi-nginx ./nginx
+  - docker build -t fil1994/multi-server ./server
+  - docker build -t fil1994/multi-worker ./worker
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push them to docker hub
+  - docker push fil1994/multi-client
+  - docker push fil1994/multi-nginx
+  - docker push fil1994/multi-server
+  - docker push fil1994/multi-worker
