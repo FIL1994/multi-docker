@@ -1,5 +1,6 @@
-sudo: required
-serviecs:
+language: generic
+os: linux
+services:
   - docker
 
 before_install:
@@ -8,7 +9,7 @@ before_install:
 script:
   - docker run -e CI=true fil1994/react-test npm test -- --coverage
 
-after_sucess:
+after_success:
   - docker build -t fil1994/multi-client ./client
   - docker build -t fil1994/multi-nginx ./nginx
   - docker build -t fil1994/multi-server ./server
